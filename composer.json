@@ -1,0 +1,26 @@
+{"name": "diogolindoso/sapo",
+  "description": "Sapo, sistema para raspar dados da plataforma Carolina Bori",
+  "license": "proprietary",
+  "authors": [
+    {
+      "email": "diogolindoso@gmail.com",
+      "name": "Diogo Lindoso"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+        "App\\": "App"
+    },
+    "psr-0": {
+      "Pear": "./pear",
+      "Mail":"./pear/mail/mail.php",
+      "Mail_mime":"./pear/mail_mime/Mail/mime.php"
+    }
+  },
+  "require": {
+    "pear/mail": "^1.4",
+    "pear/mail_mime": "^1.10",
+    "pear/net_smtp": "^1.8",
+    "pear/auth_sasl": "^1.1"
+  }
+}

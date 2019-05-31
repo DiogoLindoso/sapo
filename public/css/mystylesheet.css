@@ -1,0 +1,24 @@
+/* CSS Document */
+
+.refresh{
+    background-color: #ffffff;
+    margin: auto auto;
+    border-radius: 50px;
+    width: 60px;
+    height: 60px;
+}
+i.nc-refresh-02{
+
+    text-align: center;
+    font-size: 60px;
+    animation: refresh 2s infinite;
+}
+@keyframes refresh{
+    from{
+       transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);        
+    }
+    
+}
