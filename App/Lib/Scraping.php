@@ -17,21 +17,21 @@ class Scraping{
         return $motivoErro->item(0)->nodeValue;
     }
     public function tblprocessos($response){
-        $this->dom->loadHTML(mb_convert_encoding($response,'HTML-ENTITIES', 'UTF-8'));
-        $xpath = new DOMXPath($this->dom);
-        $tbody = $xpath->query('/html/body/table/tbody/tr');
-        foreach($tbody as $node){
-            $processo = new Processo();
-            $processo->setNumProcesso($node->childNodes->item(1)->nodeValue);
-            $processo->setCpfOuRne($node->childNodes->item(5)->nodeValue);
+        $this->dom->loadHTML(mb_convert_encoding($response,'HTML-ENTITIES', 'UTF-8')); // recebe o HTML convertido para UTF-8 e retorna um obj DOMDocument 
+        $xpath = new DOMXPath($this->dom); // recebe um obj DOMDocument e retorna um obj DOMXpath
+        $tbody = $xpath->query('/html/body/table/tbody/tr'); // recebe uma expressão Xpath e retorna um DOMNodeList contendo os nós do XPath fornecido
+        foreach($tbody as $node){ // percorre os nós (DOMNodeList) cada nó representa uma linha contendo um processo na tabela (tr)
+            $processo = new Processo(); // instancia um objeto do tipo processo
+            $processo->setNumProcesso($node->childNodes->item(1)->nodeValue); // passado como parâmetro primeiro filho do node 
+            $processo->setCpfOuRne($node->childNodes->item(5)->nodeValue); // passado como parâmetro quinto filho do node 
             $processo->setNome($node->childNodes->item(7)->nodeValue);
             $processo->setCursoArea($node->childNodes->item(9)->nodeValue);
             $processo->setEtapaSituacao($node->childNodes->item(11)->nodeValue);
             $processo->setTipo($node->childNodes->item(3)->nodeValue);
             $processo->setLink($node->childNodes->item(13)->childNodes->item(1)->attributes->getNamedItem('href')->value);
-            $arrayObjProcesso[] = $processo;
+            $arrayObjProcesso[] = $processo; // o obj processo é guardado no arrayObjProcesso
          }
-         return $arrayObjProcesso;
+         return $arrayObjProcesso; // retornado o array com os processos
     }
     public function historicos($response){
         $this->dom->loadHTML(mb_convert_encoding($response,'HTML-ENTITIES', 'UTF-8'));
