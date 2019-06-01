@@ -47,28 +47,26 @@ abstract class Controller{
     }
 
     function login($cpf,$senha, $teste=false){
-    
-        $cpf_hash = base64_encode($cpf);
-        $senha_hash = base64_encode($senha);
+        $cpf_hash = base64_encode($cpf); //codifica o cpf em base64
+        $senha_hash = base64_encode($senha); //codifica a senha em base64
         $data = array(  'id'        =>  $cpf,
-                        'identifier'=>  $cpf_hash,
-                        'password'  =>  $senha_hash,
-                        'pw'        =>  $senha
-                    );
+                                'identifier'=>  $cpf_hash,
+                                'password'  =>  $senha_hash,
+                                'pw'        =>  $senha  );
         $curl = new CurlRequest();
-        $curl->request('http://plataformacarolinabori.mec.gov.br/index/acesso');
-        $respostaLogin = $curl->request('https://ssd.mec.gov.br/ssd-server/servlet/AuthenticationById',$data);
-        $status = $curl->getStatus();
+        $curl->request('http://plataformacarolinabori.mec.gov.br/index/acesso'); //requisição para acessar o link
+        $respostaLogin = $curl->request('https://ssd.mec.gov.br/ssd-server/servlet/AuthenticationById',$data); //envio de parametros de login para o link
+        $status = $curl->getStatus(); // recebe o estatus 
         if(($status['url'] == 'http://plataformacarolinabori.mec.gov.br/') &&
-            ($status['http_code'] === 200) )
+            ($status['http_code'] === 200) ) // verifica se o login obteve êxito
         {   
             Sessao::gravarMensagem('Conexão realiada com sucesso!','success');
             $teste ? '' : Sessao::limparMensagem();
-            return $curl->request('http://plataformacarolinabori.mec.gov.br/usuario/alterar-perfil/5/19754'); 
-        }else{
+            return $curl->request('http://plataformacarolinabori.mec.gov.br/usuario/alterar-perfil/5/19754'); //acessa o link para acesso aos processos 
+        }else{ // caso não tenha êxito
             $scrapping = new Scraping();
-            $mensagem = $scrapping->erroLogin($respostaLogin);
-            Sessao::gravarMensagem($mensagem,'danger');
+            $mensagem = $scrapping->erroLogin($respostaLogin); // extrai a mensagem de erro no login ex: senha incorreta!
+            Sessao::gravarMensagem($mensagem,'danger'); // grava a mensagem de erro nas variáveis de sessão
             $teste ? '' : Sessao::limparMensagem();
             return false;
         }
