@@ -12,16 +12,16 @@ class CronController extends Controller{
     private $arrayObjProcessosDAO;
 
     public function index(){
-        $this->header = file_get_contents(PATH.'/App/Views/layouts/email/header.php');
-        $this->footer = file_get_contents(PATH.'/App/Views/layouts/email/footer.php');
+        $this->header = file_get_contents(PATH.'/App/Views/layouts/email/header.php'); // template do cabeçalho HTML do e-mail
+        $this->footer = file_get_contents(PATH.'/App/Views/layouts/email/footer.php'); // template do rodapé HTML do e-mail
         
-        $usuarioDAO = new UsuarioDao();
-        $usuarioDAO = $usuarioDAO->listarUsuarios();
-        foreach ($usuarioDAO as $usuario) {
-            $this->atualizaProcessos($usuario);
-            $textoHTML = $this->getTextoHTML($this->getProcssosDAO());
-            $email = new EmailAutenticado();
-            $email->enviaEmail($textoHTML,$usuario->email_notificacao,'Relatório Sapo');
+        $usuarioDAO = new UsuarioDao(); // instancia um obj tipo usuarioDAO
+        $usuarioDAO = $usuarioDAO->listarUsuarios(); // retorna um array de usuarios
+        foreach ($usuarioDAO as $usuario) { // para cada usuário
+            $this->atualizaProcessos($usuario); // faz uma consulta no portal com os dados do usuario e atualiza no banco se estiver diferente da consulta anterior
+            $textoHTML = $this->getTextoHTML($this->getProcssosDAO()); // recebe um array de processos continos no banco e formata como HTML
+            $email = new EmailAutenticado(); // instancia um obj do tipo EmailAutenticado
+            $email->enviaEmail($textoHTML,$usuario->email_notificacao,'Relatório Sapo'); // recebe um texto de email HTML, email do usuário, e o título do email
         }
     }
     private function getTextoHTML($processosNoBanco){
